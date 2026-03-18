@@ -12,12 +12,12 @@ module "sg" {
 
 
 
-resource "aws_security_group_rule" "frontend_frontend_alb" {
+# resource "aws_security_group_rule" "frontend_frontend_alb" {
 
-  type = "ingress"
-  security_group_id = module.sg[8].sg_id 
-  source_security_group_id = module.sg[10].sg_id 
-  from_port         = 80
-  protocol       = "tcp"
-  to_port           = 80
-}
+#   type = "ingress"
+#   security_group_id = module.sg[8].sg_id 
+#   source_security_group_id = module.sg[10].sg_id 
+#   from_port         = 80
+#   protocol       = "tcp"
+#   to_port           = 80
+# }
