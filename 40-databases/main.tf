@@ -34,7 +34,7 @@ resource "terraform_data" "mongodb" {
     # command = "bootstrap-hosts.sh"
 
     inline = [
-        "chmod -x /tmp/bootstrap.sh"
+        "chmod -x /tmp/bootstrap.sh",
         "sudo sh /tmp/bootstrap.sh"
     ]
   }
