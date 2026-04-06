@@ -4,6 +4,7 @@ resource "aws_instance" "bastion" {
     subnet_id = local.public_subnet_id
     vpc_security_group_ids = [local.bastion_sg_id]
 
+    user_data = file("bastion.sh")
     tags = merge(
         local.common_tags,
         {
