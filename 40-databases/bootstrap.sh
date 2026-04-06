@@ -27,4 +27,4 @@ else
     cd $ANSIBLE_DIR
 fi
 
-ansible-playbook -e comopnent=$component main.yaml
+ansible-playbook -e component=$component main.yaml
