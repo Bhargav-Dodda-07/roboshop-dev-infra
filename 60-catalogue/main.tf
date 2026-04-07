@@ -13,3 +13,31 @@ resource "aws_instance" "catalogue" {
     }
   )
 }
+
+# Connect to instance using remote-exec provisioners through terraform_data
+
+resource "terraform_data" "catalogue" {
+  triggers_replace = [
+    aws_instance.catalogue.id
+  ]
+
+  connection {
+    type     = "ssh"
+    user     = "ec2-user"
+    password = "DevOps321"
+    host     = aws_instance.catalogue.private_ip
+  }
+
+  # terraform copies this file to CATALOGUE server
+  provisioner "file" {
+    source = "catalogue.sh"
+    destination = "/tmp/bootstrap.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+        "chmod -x /tmp/catalogue.sh",
+        "sudo sh /tmp/catalogue.sh catalogue"
+    ]
+  }
+}
