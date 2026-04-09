@@ -80,7 +80,7 @@ resource "aws_lb_target_group" "alb-example" {
     port = 8080
     protocol = "HTTP"
     timeout = 2
-    unhealth_threshold = 2
+    unhealthy_threshold = 2
   }
 }
 
