@@ -5,3 +5,11 @@ variable "project_name" {
 variable "environment" {
     default = "dev"
 }
+
+variable "zone_id" {
+    default = "Z09495672QZRP76BIQQBH"
+}
+
+variable "domain_name" {
+    default = "daws-86s.space"
+}
