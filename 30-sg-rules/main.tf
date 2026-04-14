@@ -191,6 +191,18 @@ resource "aws_security_group_rule" "catalogue_backend_alb" {
    to_port           = 8080
 }
 
+# USER accepting traffic from Bastion
+
+resource "aws_security_group_rule" "user_bastion" {
+
+   type = "ingress"
+   security_group_id = local.user_sg_id 
+   source_security_group_id = local.bastion_sg_id
+   from_port         = 22
+   protocol       = "tcp"
+   to_port           = 22
+}
+
 # USER accepting traffic from BACKEND_ALB
 
 resource "aws_security_group_rule" "user_backend_alb" {
@@ -213,6 +225,18 @@ resource "aws_security_group_rule" "user_payment" {
    from_port         = 8080
    protocol       = "tcp"
    to_port           = 8080
+}
+
+# CART accepting traffic from Bastion
+
+resource "aws_security_group_rule" "cart_bastion" {
+
+   type = "ingress"
+   security_group_id = local.cart_sg_id 
+   source_security_group_id = local.bastion_sg_id
+   from_port         = 22
+   protocol       = "tcp"
+   to_port           = 22
 }
 
 # CART accepting traffic from BACKEND_ALB
@@ -251,6 +275,18 @@ resource "aws_security_group_rule" "cart_payment" {
    to_port           = 8080
 }
 
+# SHIPPING accepting traffic from Bastion
+
+resource "aws_security_group_rule" "shipping_bastion" {
+
+   type = "ingress"
+   security_group_id = local.shipping_sg_id 
+   source_security_group_id = local.bastion_sg_id
+   from_port         = 22
+   protocol       = "tcp"
+   to_port           = 22
+}
+
 # SHIPPING accepting traffic from BACKEND_ALB
 
 resource "aws_security_group_rule" "shipping_backend_alb" {
@@ -261,6 +297,18 @@ resource "aws_security_group_rule" "shipping_backend_alb" {
    from_port         = 8080
    protocol       = "tcp"
    to_port           = 8080
+}
+
+# PAYMENT accepting traffic from Bastion
+
+resource "aws_security_group_rule" "payment_bastion" {
+
+   type = "ingress"
+   security_group_id = local.payment_sg_id 
+   source_security_group_id = local.bastion_sg_id
+   from_port         = 22
+   protocol       = "tcp"
+   to_port           = 22
 }
 
 # PAYMENT accepting traffic from BACKEND_ALB
