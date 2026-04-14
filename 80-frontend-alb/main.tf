@@ -26,7 +26,7 @@ resource "aws_lb_listener" "frontend_alb" {
   certificate_arn   = local.frontend_alb_certificate_arn
 
   default_action {
-    type             = "fixed-respone"
+    type             = "fixed-response"
     
     fixed_response {
       content_type = "text/html"
