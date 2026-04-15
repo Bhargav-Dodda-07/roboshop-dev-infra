@@ -142,17 +142,18 @@ resource "aws_security_group_rule" "catalogue_bastion" {
    to_port           = 22
 }
 
-# CATALOGUE accepting traffic from CART
+# This is the mistake we did, cart can't access catalogue directly, it should be through backend ALB
+# # CATALOGUE accepting traffic from CART
 
-resource "aws_security_group_rule" "catalogue_cart" {
+# resource "aws_security_group_rule" "catalogue_cart" {
 
-   type = "ingress"
-   security_group_id = local.catalogue_sg_id 
-   source_security_group_id = local.cart_sg_id
-   from_port         = 8080
-   protocol       = "tcp"
-   to_port           = 8080
-}
+#    type = "ingress"
+#    security_group_id = local.catalogue_sg_id 
+#    source_security_group_id = local.cart_sg_id
+#    from_port         = 8080
+#    protocol       = "tcp"
+#    to_port           = 8080
+# }
 
 # CATALOGUE accepting traffic from BACKEND_ALB
 
