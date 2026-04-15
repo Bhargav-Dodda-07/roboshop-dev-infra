@@ -142,19 +142,6 @@ resource "aws_security_group_rule" "catalogue_bastion" {
    to_port           = 22
 }
 
-# This is the mistake we did, cart can't access catalogue directly, it should be through backend ALB
-# # CATALOGUE accepting traffic from CART
-
-# resource "aws_security_group_rule" "catalogue_cart" {
-
-#    type = "ingress"
-#    security_group_id = local.catalogue_sg_id 
-#    source_security_group_id = local.cart_sg_id
-#    from_port         = 8080
-#    protocol       = "tcp"
-#    to_port           = 8080
-# }
-
 # CATALOGUE accepting traffic from BACKEND_ALB
 
 resource "aws_security_group_rule" "catalogue_backend_alb" {
@@ -166,6 +153,7 @@ resource "aws_security_group_rule" "catalogue_backend_alb" {
    protocol       = "tcp"
    to_port           = 8080
 }
+
 
 ##### USER SG RULES #####
 
@@ -188,18 +176,6 @@ resource "aws_security_group_rule" "user_backend_alb" {
    type = "ingress"
    security_group_id = local.user_sg_id 
    source_security_group_id = local.backend_alb_sg_id
-   from_port         = 8080
-   protocol       = "tcp"
-   to_port           = 8080
-}
-
-# USER accepting traffic from PAYMENT
-
-resource "aws_security_group_rule" "user_payment" {
-
-   type = "ingress"
-   security_group_id = local.user_sg_id 
-   source_security_group_id = local.payment_sg_id
    from_port         = 8080
    protocol       = "tcp"
    to_port           = 8080
@@ -232,29 +208,7 @@ resource "aws_security_group_rule" "cart_backend_alb" {
    to_port           = 8080
 }
 
-# CART accepting traffic from SHIPPING
 
-resource "aws_security_group_rule" "cart_shipping" {
-
-   type = "ingress"
-   security_group_id = local.cart_sg_id 
-   source_security_group_id = local.shipping_sg_id
-   from_port         = 8080
-   protocol       = "tcp"
-   to_port           = 8080
-}
-
-# CART accepting traffic from PAYMENT
-
-resource "aws_security_group_rule" "cart_payment" {
-
-   type = "ingress"
-   security_group_id = local.cart_sg_id 
-   source_security_group_id = local.payment_sg_id
-   from_port         = 8080
-   protocol       = "tcp"
-   to_port           = 8080
-}
 
 
 ##### SHIPPING SG RULES #####
@@ -335,6 +289,79 @@ resource "aws_security_group_rule" "backend_alb_frontend" {
    to_port           = 80
 }
 
+# Backend ALB accepting traffic from CART
+
+resource "aws_security_group_rule" "backend_alb_cart" {
+
+   type = "ingress"
+   security_group_id = local.backend_alb_sg_id 
+   source_security_group_id = local.cart_sg_id
+   from_port         = 80
+   protocol       = "tcp"
+   to_port           = 80
+}
+
+# Backend ALB accepting traffic from SHIPPING
+
+resource "aws_security_group_rule" "backend_alb_shipping" {
+
+   type = "ingress"
+   security_group_id = local.backend_alb_sg_id 
+   source_security_group_id = local.shipping_sg_id
+   from_port         = 80
+   protocol       = "tcp"
+   to_port           = 80
+}
+
+# Backend ALB accepting traffic from FRONTEND
+
+resource "aws_security_group_rule" "backend_alb_payment" {
+
+   type = "ingress"
+   security_group_id = local.backend_alb_sg_id 
+   source_security_group_id = local.payment_sg_id
+   from_port         = 80
+   protocol       = "tcp"
+   to_port           = 80
+}
+
+##### Frontend ALB SG RUles #####
+
+# FRONTEND accepting traffic from Bastion
+
+resource "aws_security_group_rule" "frontend_bastion" {
+
+   type = "ingress"
+   security_group_id = local.frontend_sg_id 
+   source_security_group_id = local.bastion_sg_id
+   from_port         = 22
+   protocol       = "tcp"
+   to_port           = 22
+}
+
+# FRONTEND accepting traffic from FRONTEND ALB
+resource "aws_security_group_rule" "frontend_frontend_alb" {
+  type              = "ingress"
+  security_group_id = local.frontend_sg_id
+  source_security_group_id = local.frontend_alb_sg_id
+  from_port         = 80
+  protocol          = "tcp"
+  to_port           = 80
+}
+
+##### FRONTEND ALB SG RULES #####
+# FRONTEND ALB accepting traffic from PUBLIC
+resource "aws_security_group_rule" "frontend_alb_public" {
+  type              = "ingress"
+  security_group_id = local.frontend_alb_sg_id
+  cidr_blocks = ["0.0.0.0/0"]
+  from_port         = 443
+  protocol          = "tcp"
+  to_port           = 443
+}
+
+##### BASTION SG RULES #####
+
 # Bastion accepting traffic from All
 
 resource "aws_security_group_rule" "bastion_laptop" {
@@ -348,36 +375,51 @@ resource "aws_security_group_rule" "bastion_laptop" {
 }
 
 
-##### Frontend ALB SG RUles #####
+/* # This is the mistake we did, cart can't access catalogue directly, it should be through backend ALB
+# # CATALOGUE accepting traffic from CART
 
-# FRONTEND accepting traffic from FRONTEND ALB
-resource "aws_security_group_rule" "frontend_frontend_alb" {
-  type              = "ingress"
-  security_group_id = local.frontend_sg_id
-  source_security_group_id = local.frontend_alb_sg_id
-  from_port         = 80
-  protocol          = "tcp"
-  to_port           = 80
-}
+# resource "aws_security_group_rule" "catalogue_cart" {
 
-# FRONTEND ALB accepting traffic from PUBLIC
-resource "aws_security_group_rule" "frontend_alb_public" {
-  type              = "ingress"
-  security_group_id = local.frontend_alb_sg_id
-  cidr_blocks = ["0.0.0.0/0"]
-  from_port         = 443
-  protocol          = "tcp"
-  to_port           = 443
-}
+#    type = "ingress"
+#    security_group_id = local.catalogue_sg_id 
+#    source_security_group_id = local.cart_sg_id
+#    from_port         = 8080
+#    protocol       = "tcp"
+#    to_port           = 8080
+# }
 
-# FRONTEND accepting traffic from Bastion
+# USER accepting traffic from PAYMENT
 
-resource "aws_security_group_rule" "frontend_bastion" {
+resource "aws_security_group_rule" "user_payment" {
 
    type = "ingress"
-   security_group_id = local.frontend_sg_id 
-   source_security_group_id = local.bastion_sg_id
-   from_port         = 22
+   security_group_id = local.user_sg_id 
+   source_security_group_id = local.payment_sg_id
+   from_port         = 8080
    protocol       = "tcp"
-   to_port           = 22
+   to_port           = 8080
 }
+
+# CART accepting traffic from SHIPPING
+
+resource "aws_security_group_rule" "cart_shipping" {
+
+   type = "ingress"
+   security_group_id = local.cart_sg_id 
+   source_security_group_id = local.shipping_sg_id
+   from_port         = 8080
+   protocol       = "tcp"
+   to_port           = 8080
+}
+
+# CART accepting traffic from PAYMENT
+
+resource "aws_security_group_rule" "cart_payment" {
+
+   type = "ingress"
+   security_group_id = local.cart_sg_id 
+   source_security_group_id = local.payment_sg_id
+   from_port         = 8080
+   protocol       = "tcp"
+   to_port           = 8080
+} */
