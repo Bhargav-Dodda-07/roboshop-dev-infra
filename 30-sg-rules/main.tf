@@ -388,6 +388,38 @@ resource "aws_security_group_rule" "open_vpn_public" {
    to_port           = 22
 }
 
+# VPN accepting traffic on the port 943
+resource "aws_security_group_rule" "open_vpn_943" {
+
+   type = "ingress"
+   security_group_id = local.open_vpn_sg_id 
+   cidr_blocks = ["0.0.0.0/0"]
+   from_port         = 943
+   protocol       = "tcp"
+   to_port           = 943
+}
+
+# VPN accepting traffic on the port 443
+resource "aws_security_group_rule" "open_vpn_443" {
+
+   type = "ingress"
+   security_group_id = local.open_vpn_sg_id 
+   cidr_blocks = ["0.0.0.0/0"]
+   from_port         = 443
+   protocol       = "tcp"
+   to_port           = 443
+}
+
+# VPN accepting traffic on the port 1194
+resource "aws_security_group_rule" "open_vpn_1194" {
+
+   type = "ingress"
+   security_group_id = local.open_vpn_sg_id 
+   cidr_blocks = ["0.0.0.0/0"]
+   from_port         = 1194
+   protocol       = "tcp"
+   to_port           = 1194
+}
 /* # This is the mistake we did, cart can't access catalogue directly, it should be through backend ALB
 # # CATALOGUE accepting traffic from CART
 
