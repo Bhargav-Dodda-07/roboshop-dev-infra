@@ -420,6 +420,28 @@ resource "aws_security_group_rule" "open_vpn_1194" {
    protocol       = "tcp"
    to_port           = 1194
 }
+
+# VPN accepting traffic on the port 1194
+resource "aws_security_group_rule" "open_vpn_1194" {
+
+   type = "ingress"
+   security_group_id = local.open_vpn_sg_id 
+   cidr_blocks = ["0.0.0.0/0"]
+   from_port         = 1194
+   protocol       = "tcp"
+   to_port           = 1194
+}
+
+# VPN accepting traffic on the port 1194
+resource "aws_security_group_rule" "catalogue_vpn" {
+
+   type = "ingress"
+   security_group_id = local.catalogue_sg_id
+   source_security_group_id = local.open_vpn_sg_id 
+   from_port         = 22
+   protocol       = "tcp"
+   to_port           = 22
+}
 /* # This is the mistake we did, cart can't access catalogue directly, it should be through backend ALB
 # # CATALOGUE accepting traffic from CART
 
