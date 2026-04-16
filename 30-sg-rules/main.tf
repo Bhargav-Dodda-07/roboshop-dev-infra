@@ -375,6 +375,19 @@ resource "aws_security_group_rule" "bastion_laptop" {
 }
 
 
+##### OPEN_VPN SG RULES #####
+
+# VPN accepting traffic from the public
+resource "aws_security_group_rule" "open_vpn_public" {
+
+   type = "ingress"
+   security_group_id = local.open_vpn_sg_id 
+   cidr_blocks = ["0.0.0.0/0"]
+   from_port         = 22
+   protocol       = "tcp"
+   to_port           = 22
+}
+
 /* # This is the mistake we did, cart can't access catalogue directly, it should be through backend ALB
 # # CATALOGUE accepting traffic from CART
 
