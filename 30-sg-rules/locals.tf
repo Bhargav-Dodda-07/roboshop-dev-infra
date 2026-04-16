@@ -18,7 +18,7 @@ locals {
     vpn_ingress_rules = {
         mysql_22 = {
             sg_id = local.mysql_sg_id
-            prot = 22
+            port = 22
         }
 
         mysql_3306 = {
