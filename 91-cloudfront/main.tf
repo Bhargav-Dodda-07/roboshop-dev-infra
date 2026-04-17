@@ -40,7 +40,7 @@ aliases = ["${var.environment}.${var.domain_name}"]
 
   # Cache behavior with precedence 1
   ordered_cache_behavior {
-    path_pattern     = "/media/*"
+    path_pattern     = "/images/*"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "${var.project_name}-${var.environment}.${var.domain_name}"
